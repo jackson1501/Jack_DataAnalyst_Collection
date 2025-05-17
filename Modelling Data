@@ -135,3 +135,14 @@ from sklearn.preprocessing import StandardScaler
 
 # We create the pipeline by creating a list of tuples including the name of the model or estimator and its corresponding constructor.
 Input=[('scale',StandardScaler()), ('polynomial', PolynomialFeatures(include_bias=False)), ('model',LinearRegression())]
+# this means we normalize the value first using StandardScaler, and then convert it to polynomial, and then put the data into model LinearRegression
+
+# We input the list as an argument to the pipeline constructor:
+pipe=Pipeline(Input)
+pipe
+
+# First, we convert the data type Z to type float to avoid conversion warnings that may appear as a result of StandardScaler taking float inputs.
+# Then, we can normalize the data, perform a transform and fit the model simultaneously.
+Z = Z.astype(float)
+pipe.fit(Z,y) #fit the data into the pipe (Z and y represent as we can see from the above code
+
