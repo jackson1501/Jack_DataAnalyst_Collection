@@ -50,4 +50,13 @@ lm.fit(Z, df['price']) # fit the dataset into the linear variable
 
 # import the visualization package: seaborn to check our model visualization
 import seaborn as sns
-%matplotlib inline 
+%matplotlib inline
+
+# checking the visualization of current data
+width = 12 # width of the plot
+height = 10 # the height of the plot
+plt.figure(figsize=(width, height)) # set the size of the plot
+sns.regplot(x="highway-mpg", y="price", data=df) #set the data into the plot
+plt.ylim(0,) # set the start of value in the plot (y,x)
+
+
