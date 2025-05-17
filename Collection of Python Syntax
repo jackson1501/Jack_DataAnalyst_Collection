@@ -106,4 +106,8 @@ scipy for statistical operations.
 seaborn for visualizing the data.
 matplotlib for additional plotting tools.#
 
+# Generate the statistical description of all the features being used in the data set. Include "object" data types as well.
+print(df.describe())
+print(df.describe(include=['object']))
+
 
