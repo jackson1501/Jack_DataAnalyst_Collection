@@ -35,6 +35,7 @@ sns.regplot(x = 'header_1',y = 'header_2',data= df)
 
 # boxplot : to see outliers while d is 1 column of the data sets
 plt.boxplot(d)
+sns.boxplot(x="Category", y="Price", data=df)
 
 # residual plot : A residual plot is used to display the quality of polynomial regression.
 sns.residplot(data=df,x='header_1', y='header_2') #or 
