@@ -108,4 +108,9 @@ p = np.poly1d(f) # set the data into model/formula to find the yhat
 print(p) # show the model/formula
 
 # call the function to show the plot from our model
-PlotPolly(p, x, y, 'highway-mpg') # p is the model/formula we set, x is the highway-mpg current data, y is the price current data, 'highway-mpg' is the x name of the plot
+PlotPolly(p, x, y, 'highway-mpg')
+# p is the model/formula we set, x is the highway-mpg current data, y is the price current data,
+#'highway-mpg' is the x name of the plot
+
+
+
