@@ -60,3 +60,10 @@ sns.regplot(x="highway-mpg", y="price", data=df) #set the data into the plot
 plt.ylim(0,) # set the start of value in the plot (y,x)
 
 
+# checking the visualization of current data using residual plot to check what model we could use
+# Randomly spread out residuals means that the variance is constant, and thus the linear model is a good fit for the data
+width = 12
+height = 10
+plt.figure(figsize=(width, height))
+sns.residplot(x=df['highway-mpg'], y=df['price'])
+plt.show()
