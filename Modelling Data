@@ -97,3 +97,15 @@ def PlotPolly(model, independent_variable, dependent_variabble, Name):
 
     plt.show()
     plt.close()
+
+# get the data first
+x = df['highway-mpg']
+y = df['price']
+
+# Here we use a polynomial of the 3rd order (cubic), using the function polyfit, then use the function poly1d to display the polynomial function
+f = np.polyfit(x, y, 3) #set the data into polynomial
+p = np.poly1d(f) # set the data into model/formula to find the yhat
+print(p) # show the model/formula
+
+# call the function to show the plot from our model
+PlotPolly(p, x, y, 'highway-mpg') # p is the model/formula we set, x is the highway-mpg current data, y is the price current data, 'highway-mpg' is the x name of the plot
