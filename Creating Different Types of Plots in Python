@@ -12,7 +12,7 @@ import seaborn as sns
 # standard line plot
 plt.plot(x,y)
 
-# standard scatter plot
+# scatter plot : Scatter plots are graphs that present the relationship between two variables in a data set. It represents data points on a two-dimensional plane
 plt.scatter(x,y)
 
 # histogram plot
@@ -27,3 +27,14 @@ plt.bar(x,height)
 
 # Pseudo Color Plot
 plt.pcolor(C) # c is matrix of the pivot table data
+
+# regression plot
+sns.regplot(x = 'header_1',y = 'header_2',data= df)
+
+# boxplot : to see outliers while d is 1 column of the data sets
+plt.boxplot(d)
+
+# residual plot : A residual plot is used to display the quality of polynomial regression.
+sns.residplot(data=df,x='header_1', y='header_2') #or 
+sns.residplot(x=df['header_1'], y=df['header_2'])
+
