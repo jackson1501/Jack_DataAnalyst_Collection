@@ -1,0 +1,14 @@
+# import the library
+from matplotlib import pyplot as plt
+# alternative code to import the library
+import matplotlib.pyplot as plt
+
+# we require the graph to be displayed inside the notebook interface itself. It is, therefore, essential to add the following 'magic' statement after loading the library.
+%matplotlib inline
+
+# import seaborn library
+import seaborn as sns
+
+# standard line plot
+plt.plot(x,y)
+
