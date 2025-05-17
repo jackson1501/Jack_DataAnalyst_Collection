@@ -12,3 +12,18 @@ import seaborn as sns
 # standard line plot
 plt.plot(x,y)
 
+# standard scatter plot
+plt.scatter(x,y)
+
+# histogram plot
+plt.hist(x,bins)
+# how to get the bins
+bins = np.linspace(min(df['Price']),max(df['Price']),4)
+group_names = ["Low","Medium","High"]
+df['price_binned'] = pd.cut(df['Price'], bins, labels = group_names, include_lowest = True)
+
+# bar plot, x is the categorical variable, and height is the number of values belonging to the category. You can adjust the width of each bin using an additional width argument in the function
+plt.bar(x,height)
+
+# Pseudo Color Plot
+plt.pcolor(C) # c is matrix of the pivot table data
