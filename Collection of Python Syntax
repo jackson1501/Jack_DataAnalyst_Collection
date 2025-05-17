@@ -115,5 +115,25 @@ print(df.describe(include=['object']))
 df_gptest = df[['GPU','CPU_core','Price']]
 grouped_test1 = df_gptest.groupby(['GPU','CPU_core'],as_index=False).mean()
 print(grouped_test1)
+# create the pivot table
+grouped_pivot = grouped_test1.pivot(index='GPU',columns='CPU_core')
+print(grouped_pivot)
+# create the plot
+fig, ax = plt.subplots()
+im = ax.pcolor(grouped_pivot, cmap='RdBu')
+
+#label names
+row_labels = grouped_pivot.columns.levels[1]
+col_labels = grouped_pivot.index
+
+#move ticks and labels to the center
+ax.set_xticks(np.arange(grouped_pivot.shape[1]) + 0.5, minor=False)
+ax.set_yticks(np.arange(grouped_pivot.shape[0]) + 0.5, minor=False)
+
+#insert labels
+ax.set_xticklabels(row_labels, minor=False)
+ax.set_yticklabels(col_labels, minor=False)
+
+fig.colorbar(im)
 
 
