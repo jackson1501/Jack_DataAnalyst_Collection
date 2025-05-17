@@ -113,4 +113,25 @@ PlotPolly(p, x, y, 'highway-mpg')
 #'highway-mpg' is the x name of the plot
 
 
+# import the library to use the polynomial + pipelines
+from sklearn.preprocessing import PolynomialFeatures
 
+# set the variable pr as PolynomialFeatures with 2 degree
+pr=PolynomialFeatures(degree=2)
+pr
+
+# get the data column from variable Z before and the save it to another variable
+Z_pr=pr.fit_transform(Z)
+
+# to check the shape of the data before transform
+Z.shape # the result is (201,4) = 201 record data with 4 features
+
+# to chek the shape of the data after transform
+Z_pr.shape # the result is (201,15) = 201 record data with 15 features
+
+# Data Pipelines simplify the steps of processing the data. We use the module Pipeline to create a pipeline. We also use StandardScaler as a step in our pipeline.
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+# We create the pipeline by creating a list of tuples including the name of the model or estimator and its corresponding constructor.
+Input=[('scale',StandardScaler()), ('polynomial', PolynomialFeatures(include_bias=False)), ('model',LinearRegression())]
