@@ -22,3 +22,24 @@ file_name="usedcars.csv"
 # check the downloaded data
 df = pd.read_csv(file_name)
 df.head()
+
+
+# import the library scikit for modeling data
+from sklearn.linear_model import LinearRegression
+
+# create the regression object
+lm = LinearRegression()
+lm
+
+# fit the data into the model
+X = df[['highway-mpg']]
+Y = df['price']
+lm.fit(X,Y)
+
+# make a predict value and stored it into a variable
+Yhat=lm.predict(X)
+Yhat[0:5] # show the array of the 5 result
+
+#checking the value of the intercept and slope
+lm.intercept_ #intercept
+lm.coef_ #slope
