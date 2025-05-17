@@ -27,7 +27,7 @@ df.head()
 # import the library scikit for modeling data
 from sklearn.linear_model import LinearRegression
 
-# create the regression object
+# create the single linear regression (SLR) object
 lm = LinearRegression()
 lm
 
@@ -43,3 +43,9 @@ Yhat[0:5] # show the array of the 5 result
 #checking the value of the intercept and slope
 lm.intercept_ #intercept
 lm.coef_ #slope
+
+# creating the multi linear regresion (MLR) model
+Z = df[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']] #set the column data (x)
+lm.fit(Z, df['price']) # fit the dataset into the linear variable
+
+
