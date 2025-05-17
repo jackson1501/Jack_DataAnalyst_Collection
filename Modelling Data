@@ -48,4 +48,6 @@ lm.coef_ #slope
 Z = df[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']] #set the column data (x)
 lm.fit(Z, df['price']) # fit the dataset into the linear variable
 
-
+# import the visualization package: seaborn to check our model visualization
+import seaborn as sns
+%matplotlib inline 
