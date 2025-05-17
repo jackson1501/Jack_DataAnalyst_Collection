@@ -15,7 +15,8 @@ plt.plot(x,y)
 # scatter plot : Scatter plots are graphs that present the relationship between two variables in a data set. It represents data points on a two-dimensional plane
 plt.scatter(x,y)
 
-# histogram plot
+# histogram plot : A histogram is an important visual representation of data in categorical form. To view the data in a "Binned" form, we may use the histogram plot with a number of bins
+# required or even with the data points that mark the bin edges. The x-axis represents the data bins, and the y-axis represents the number of elements in each of the bins
 plt.hist(x,bins)
 # how to get the bins
 bins = np.linspace(min(df['Price']),max(df['Price']),4)
@@ -25,10 +26,11 @@ df['price_binned'] = pd.cut(df['Price'], bins, labels = group_names, include_low
 # bar plot, x is the categorical variable, and height is the number of values belonging to the category. You can adjust the width of each bin using an additional width argument in the function
 plt.bar(x,height)
 
-# Pseudo Color Plot
+# Pseudo Color Plot : In this course, you use the pcolor plot for visualizing the contents of a pivot table that has been grouped on the basis of 2 parameters. Those parameters then represent
+# the x and y-axis components that create the grid. The values in the pivot table are the average values of a third parameter. These values act as the code for the color the cell is going to take.
 plt.pcolor(C) # c is matrix of the pivot table data
 
-# regression plot
+# regression plot : just like the scatter but to show the line of regression between 2 variable
 sns.regplot(x = 'header_1',y = 'header_2',data= df)
 
 # boxplot : to see outliers while d is 1 column of the data sets
@@ -38,3 +40,10 @@ plt.boxplot(d)
 sns.residplot(data=df,x='header_1', y='header_2') #or 
 sns.residplot(x=df['header_1'], y=df['header_2'])
 
+# A Kernel Density Estimate (KDE) plot is a graph that creates a probability distribution curve for the data based upon its likelihood of occurrence on a specific value. This is created for a
+# single vector of information. It is used in the course in order to compare the likely curves of the actual data with that of the predicted data.
+sns.kdeplot(X)
+
+# Distribution Plot, This plot has the capacity to combine the histogram and the KDE plots. This plot creates the distribution curve using the bins of the histogram as a reference for estimation. You can
+# optionally keep or discard the histogram from being displayed. In the context of the course, this plot can be used interchangeably with the KDE plot.
+sns.distplot(X,hist=False)
