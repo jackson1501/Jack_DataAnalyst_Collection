@@ -1,0 +1,109 @@
+# Correlation values of the three attributes with Price
+pearson_coef, p_value = stats.pearsonr(df['CPU_frequency'], df['Price'])
+print("The CPU-Frequency Correlation Coefficient is", pearson_coef, " with a P-value of P =", p_value)
+
+pearson_coef, p_value = stats.pearsonr(df['Screen_Size_inch'], df['Price'])
+print("The Screen_Size_inch Correlation Coefficient is", pearson_coef, " with a P-value of P =", p_value)
+
+pearson_coef, p_value = stats.pearsonr(df['Weight_pounds'], df['Price'])
+print("The Weight_pounds Correlation Coefficient is", pearson_coef, " with a P-value of P =", p_value)
+
+for param in ["CPU_frequency", "Screen_Size_inch","Weight_pounds"]:
+    print(f"Correlation of Price and {param} is ", df[[param,"Price"]].corr())
+
+
+#Function to download the dataset
+from pyodide.http import pyfetch
+
+async def download(url, filename):
+    response = await pyfetch(url)
+    if response.status == 200:
+        with open(filename, "wb") as f:
+            f.write(await response.bytes())
+
+#define the file path
+file_path = ‘path/file.csv’
+
+#download the dataset
+await download(file_path, "auto.csv")
+file_name="auto.csv"
+
+#set the headers name
+headers = ["symboling","normalized-losses","make","fuel-type","aspiration", "num-of-doors","body-style",
+         "drive-wheels","engine-location","wheel-base", "length","width","height","curb-weight","engine-type",
+         "num-of-cylinders", "engine-size","fuel-system","bore","stroke","compression-ratio","horsepower",
+         "peak-rpm","city-mpg","highway-mpg","price"]
+
+#set the data to dataframe
+df = pd.read_csv(file_name, names = headers)
+
+#DATA WRANGLING / DATA CLEANING
+
+import numpy as np
+
+# replace "?" to NaN
+df.replace("?", np.nan, inplace = True)
+
+#get the missing value by check the true result
+missing_data = df.isnull()
+missing_data.head(5)
+
+#count missing value in column
+missing_data = df.isnull()
+print(missing_data.head())
+for column in missing_data.columns.values.tolist():
+    print(column)
+    print (missing_data[column].value_counts())
+    print("")    
+
+#get_avg_data_and_replace the missing value
+avg_weight = df['Weight_kg'].astype('float').mean(axis=0)
+df['Weight_kg'].replace(np.nan, avg_weight, inplace=True)
+
+#get common/most data to replace the missing value
+most_screen_size = df['Screen_Size_cm'].value_counts().idxmax()
+df['Screen_Size_cm'].replace(np.nan, most_screen_size, inplace=True)
+
+#change the datatype of dataframe
+df[["Weight_kg","Screen_Size_cm"]] = df[["Weight_kg","Screen_Size_cm"]].astype("float")
+
+#change the data value
+df[['Screen_Size_cm']] = df[['Screen_Size_cm']]/2.54
+
+#change the column name
+df.rename(columns={"Screen_Size_cm": "Screen_Size_inch"}, inplace=True)
+
+#normalization data
+df['CPU_frequency'] = df['CPU_frequency'] / df['CPU_frequency'].max()
+
+#binning the data
+bins = np.linspace(min(df['Price']),max(df['Price']),4)
+group_names = ["Low","Medium","High"]
+df['price_binned'] = pd.cut(df['Price'], bins, labels = group_names, include_lowest = True)
+
+#display plot for the binning
+plt.bar(group_names, df["price_binned"].value_counts())
+plt.xlabel("Price")
+plt.ylabel("count")
+plt.title("Price bins")
+
+#turning categorical into qty variable
+df_dummy_1 = pd.get_dummies(df['Screen'])
+df_dummy_1.rename(columns={'Full HD' : 'Screen_Full_HD' , 'IPS Panel' : 'Screen_IPS_Panel'},inplace = True)
+df = pd.concat([df,df_dummy_1],axis = 1)
+df.drop('Screen', axis = 1, inplace=True)
+df.head()
+
+#get the pearson correlation and p_value
+from scipy import stats
+pearson_coef, p_value = stats.pearsonr(df['wheel-base'], df['price'])
+print("The Pearson Correlation Coefficient is", pearson_coef, " with a P-value of P =", p_value)
+
+#skillsnetwork for downloading the data
+pandas for managing the data.
+numpy for mathematical operations.
+scipy for statistical operations.
+seaborn for visualizing the data.
+matplotlib for additional plotting tools.#
+
+
