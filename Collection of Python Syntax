@@ -110,4 +110,10 @@ matplotlib for additional plotting tools.#
 print(df.describe())
 print(df.describe(include=['object']))
 
+# Group the parameters "GPU", "CPU_core" and "Price" to make a pivot table and visualize this connection using the pcolor plot.
+# Create Group
+df_gptest = df[['GPU','CPU_core','Price']]
+grouped_test1 = df_gptest.groupby(['GPU','CPU_core'],as_index=False).mean()
+print(grouped_test1)
+
 
