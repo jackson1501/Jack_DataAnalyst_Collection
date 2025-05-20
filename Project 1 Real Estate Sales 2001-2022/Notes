@@ -1,1 +1,50 @@
+About Dataset
+This dataset provides detailed information about property sales, including various property features and sale statistics. The data spans multiple years and includes information about towns, property types, sale amounts, assessed values, and additional remarks from assessors. Below is an overview of the key columns:
 
+1-Serial Number: A unique identifier for each property record.
+
+2-List Year: The year when the property was listed for sale.
+
+3-Date Recorded: The date the property sale was recorded in the dataset.
+
+4-Town: The town or city where the property is located.
+
+5-Address: The street address of the property.
+
+6-Assessed Value: The value assigned to the property for tax purposes.
+
+7-Sale Amount: The final sale price of the property.
+
+8-Sales Ratio: A ratio of the sale amount to the assessed value, potentially indicating how close the sale price is to the assessed value.
+
+9-Property Type: The type of property (e.g., Residential, Commercial).
+
+10-Residential Type: The specific type of residential property, such as Single Family.
+
+11-Non Use Code: Code indicating properties that may not be used for typical purposes (e.g., vacant land).
+
+12-Assessor Remarks: Additional remarks from the assessor about the property.
+
+13-OPM Remarks: Remarks from the Office of Property Management.
+
+14-Location: Geographical coordinates of the property (latitude and longitude).
+
+Labels and Categories:
+Price Ranges: Several columns categorize properties into different price ranges based on their sale amount, assessed value, etc.
+
+Time Periods: Data is also grouped by time periods (e.g., different months or years), with counts of properties that fall within each time range.
+
+Location: Some rows include coordinates indicating the exact location of the property (longitude and latitude).
+
+Use Cases:
+Regression:
+
+You can predict Sale Amount based on other features like Assessed Value, Sales Ratio, Property Type, and Location.
+
+Classification:
+
+Classify properties based on Property Type or Residential Type.
+
+You can also create a classification model to predict whether the Sales Ratio falls within a specific range.
+
+This dataset could be particularly useful for real estate analysis, pricing models, or exploring patterns in property sales over time.
