@@ -1,1 +1,26 @@
+Summary: Advanced Visualizations and Geospatial Data
+Congratulations! You have completed this module. At this point in the course, you know: 
 
+Folium is a data visualization library in Python that helps people visualize geospatial data. 
+
+With Folium, you can create maps of different styles, such as street-level maps, stamen maps, and more. 
+
+A feature of Folium is that you can create different map styles using the tiles parameter.
+
+With Folium, you can easily add markers on maps.
+
+The ‘location’ parameter specifies the latitude and longitude coordinates of the center point of the map.
+
+Markers play a vital role in enhancing interactivity and adding context to maps.
+
+The folium.Marker() function specifies location parameters.
+
+The popup parameter provides a label upon being clicked.
+
+Markers can be created using “feature group.”
+
+A choropleth map is a thematic map in which areas are shaded or patterned in proportion to the measurement of the statistical variable.
+
+When creating a choropleth map, Folium requires a GeoJson file that includes geospatial data of the region.
+
+The Mapbox Bright Tileset displays the name of every country when used on a map.
