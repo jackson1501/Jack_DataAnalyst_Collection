@@ -1,103 +1,44 @@
 import pandas as pd
-import re
-import os # Import the os module to check current working directory
 
-# --- Helper to check current working directory ---
-print(f"Current working directory: {os.getcwd()}")
-print("Please ensure 'group_employment.csv' and 'unique_employment_phrases_final_refined_v2.csv' are in this directory, or update the paths below.")
-print("-" * 80)
+# Load the data from the CSV file
+df = pd.read_csv('group_employment.csv')
 
-# Define the multi-word phrases and placeholder as used in the last refinement step
-multi_word_phrases_to_preserve_space = [
-    'and not looking for work',
-    'independent contractor',
-    'looking for work',
-    'not employed',
-    'i prefer not to say',
-]
-SPACE_PLACEHOLDER = '___TEMP_SPACE___'
+# --- Step 1: Prepare the DataFrame for exploding ---
+# Create a copy of the original DataFrame to avoid modifying it directly.
+# Reset the index and rename the new index column to 'original_index'
+# This is crucial for correctly grouping the data back after exploding.
+df_exploded = df.copy().reset_index().rename(columns={'index': 'original_index'})
 
-# Function to normalize an employment string into a list of cleaned phrases
-def normalize_employment_string(entry):
-    entry_lower = str(entry).lower()
+# --- Step 2: Split the 'Employment' column into lists ---
+# The 'Employment' column contains multiple values separated by semicolons.
+# We split these strings into lists of individual employment types.
+df_exploded['Employment'] = df_exploded['Employment'].str.split(';')
 
-    # Temporarily replace spaces within the specified multi-word phrases with a placeholder
-    for phrase in multi_word_phrases_to_preserve_space:
-        entry_lower = entry_lower.replace(phrase, phrase.replace(' ', SPACE_PLACEHOLDER))
+# --- Step 3: Explode the 'Employment' column ---
+# The explode() method transforms each element of a list-like entry into a separate row.
+# This means if an original row had ['Employed, full-time', 'Employed, part-time'],
+# it will now become two rows, each with one employment type.
+df_exploded = df_exploded.explode('Employment')
 
-    # Normalize delimiters: replace commas with semicolons
-    normalized_entry = entry_lower.replace(',', ';')
+# --- Step 4: Perform one-hot encoding using get_dummies() ---
+# pd.get_dummies() converts categorical data into dummy/indicator variables.
+# For each unique employment type, a new column will be created.
+# A '1' indicates the presence of that employment type in the row, '0' otherwise.
+# The 'prefix' argument adds 'Employment_' to the new column names for clarity.
+df_one_hot = pd.get_dummies(df_exploded['Employment'], prefix='Employment')
 
-    # Split by semicolon to get major segments (values)
-    segments = normalized_entry.split(';')
+# --- Step 5: Concatenate and Aggregate ---
+# We need to re-associate the one-hot encoded rows with their original entries.
+# First, concatenate the 'original_index' column with the one-hot encoded DataFrame.
+df_one_hot = pd.concat([df_exploded['original_index'], df_one_hot], axis=1)
 
-    cleaned_phrases_for_entry = []
-    for segment in segments:
-        # Split each segment by whitespace to get individual 'tokens'
-        tokens = segment.split()
+# Then, group by the 'original_index' and sum the dummy variables.
+# This effectively combines the exploded rows back into a single row for each original entry.
+# If an original entry had multiple employment types, the corresponding dummy columns will sum to 1.
+df_one_hot = df_one_hot.groupby('original_index').sum()
 
-        for token in tokens:
-            # Clean each token: allow letters, numbers, hyphens, and the temporary placeholder.
-            cleaned_token = re.sub(f'[^{re.escape(SPACE_PLACEHOLDER)}a-z0-9-]', '', token).strip()
-
-            if cleaned_token:
-                # Restore the original spaces in the multi-word phrases
-                final_phrase = cleaned_token.replace(SPACE_PLACEHOLDER, ' ')
-                cleaned_phrases_for_entry.append(final_phrase)
-    return cleaned_phrases_for_entry
-
-# --- Main execution ---
-
-# 1. Load the main employment data from 'group_employment.csv'
-# Make sure this path is correct for your file location!
-try:
-    df_employment = pd.read_csv('group_employment.csv', encoding='latin1')
-    print("Loaded 'group_employment.csv' successfully.")
-except FileNotFoundError:
-    print("Error: 'group_employment.csv' not found. Double-check the file name and its location.")
-    exit()
-except UnicodeDecodeError:
-    print("Error: Could not decode 'group_employment.csv' with 'latin1' encoding. Try a different encoding like 'cp1252'.")
-    exit()
-except Exception as e:
-    print(f"An unexpected error occurred loading 'group_employment.csv': {e}")
-    exit()
-
-# 2. Load the unique phrases that will form the one-hot encoding columns
-# Make sure this path is correct for your file location!
-try:
-    df_unique_phrases = pd.read_csv('unique_employment_phrases_final_refined_v2.csv')
-    unique_phrases = df_unique_phrases['Unique_Employment_Phrases'].tolist()
-    print("Loaded unique phrases for one-hot encoding successfully.")
-except FileNotFoundError:
-    print("Error: 'unique_employment_phrases_final_refined_v2.csv' not found. Cannot perform one-hot encoding without the reference phrases.")
-    exit()
-except Exception as e:
-    print(f"An error occurred loading unique phrases: {e}")
-    exit()
-
-# 3. Apply the normalization function to the 'Employment' column of the main DataFrame
-df_employment['Normalized_Employment'] = df_employment['Employment'].apply(normalize_employment_string)
-
-# 4. Create an empty DataFrame for one-hot encoding
-one_hot_df = pd.DataFrame(0, index=df_employment.index, columns=unique_phrases)
-
-# 5. Populate the one-hot encoded DataFrame
-for index, row in df_employment.iterrows():
-    for phrase in row['Normalized_Employment']:
-        if phrase in one_hot_df.columns:
-            one_hot_df.at[index, phrase] = 1
-
-# 6. Concatenate the original DataFrame with the one-hot encoded columns
-df_encoded = pd.concat([df_employment, one_hot_df], axis=1)
-
-# 7. Drop the intermediate 'Normalized_Employment' column and the original 'Employment' if desired
-df_encoded = df_encoded.drop(columns=['Normalized_Employment', 'Employment'])
-
-print("\nFirst 5 rows of the One-Hot Encoded DataFrame:")
-print(df_encoded.head())
-
-# 8. Save the one-hot encoded DataFrame to a CSV file
-output_filename = 'group_employment_one_hot_encoded.csv'
-df_encoded.to_csv(output_filename, index=False)
-print(f"\nOne-Hot Encoded DataFrame saved to '{output_filename}'.")
+# --- Step 6: Display the results ---
+# Print the first 5 rows of the final one-hot encoded DataFrame.
+# .to_markdown() is used for clear, formatted output.
+print("First 5 rows of one-hot encoded DataFrame:\n")
+print(df_one_hot.head().to_markdown(numalign="left", stralign="left"))
